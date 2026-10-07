@@ -1,0 +1,246 @@
+/* Admin panel style overrides go here.
+ *
+ * Payload ships its own styles inside `@layer payload-default`. Everything in
+ * this file is unlayered, and unlayered CSS beats layered CSS whatever the
+ * specificity — so plain selectors are enough here. No `!important`, and no
+ * selector arms races.
+ *
+ * The admin is a separate route group with its own layout, so the frontend
+ * tokens in app/(frontend)/globals.css are not in scope. The two brand values
+ * below are the only literals; everything else uses Payload's own theme
+ * variables so both light and dark admin themes keep working.
+ */
+
+:root {
+  /* --color-brand from app/(frontend)/globals.css. Kept in sync by hand: the
+   * admin route group cannot import the frontend stylesheet. */
+  --onmu-brand: #1e3581;
+  --onmu-brand-hover: #16285f;
+  --onmu-row-radius: 6px;
+  --onmu-row-gap: 2px;
+}
+
+html[data-theme="dark"] {
+  /* The brand navy is close to unreadable on a dark ground. This is the same
+   * hue lifted in lightness until it carries on elevation-0. */
+  --onmu-brand: #8ea2ee;
+  --onmu-brand-hover: #a8b8f3;
+}
+
+/* ---------------------------------------------------------------- scrolling */
+
+/* Payload hides the nav scrollbar. With four collections that is invisible;
+ * the content model in docs/04-content-model.md has many more coming, and a
+ * list that scrolls with no affordance is a list whose bottom half is never
+ * found. Give it a thin one instead. */
+.nav__scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-elevation-150) transparent;
+  /* Tighter than the default `--base` so the link rows below can carry their
+   * own inset and still line up where the text used to sit. */
+  --nav-padding-inline-start: 12px;
+  --nav-padding-inline-end: 12px;
+}
+
+.nav__scroll::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+
+.nav__scroll::-webkit-scrollbar-thumb {
+  background: var(--theme-elevation-150);
+  border-radius: 3px;
+}
+
+.nav__scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ------------------------------------------------------------ group headings */
+
+.nav-group {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.nav-group:last-child {
+  margin-bottom: 0;
+}
+
+/* A section heading, not a link: small, tracked-out, uppercase, quiet. The
+ * contrast in weight and colour is what separates the two levels — indentation
+ * alone does not survive a long Ukrainian label wrapping onto a second line. */
+.nav-group__toggle {
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  margin-bottom: 4px;
+  border-radius: var(--onmu-row-radius);
+  color: var(--theme-elevation-500);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.nav-group__toggle:hover,
+.nav-group__toggle:focus-visible {
+  background: var(--theme-elevation-50);
+  color: var(--theme-elevation-800);
+}
+
+.nav-group__toggle:focus-visible {
+  outline: var(--accessibility-outline);
+  outline-offset: -2px;
+}
+
+/* Payload nudges the chevron up to sit against a flex-start baseline. The
+ * heading is centre-aligned now, so that nudge would push it off-centre. */
+.nav-group__toggle svg {
+  margin-top: 0;
+}
+
+.nav-group__indicator svg .stroke {
+  stroke: var(--theme-elevation-400);
+}
+
+.nav-group__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onmu-row-gap);
+}
+
+/* ------------------------------------------------------------------- links */
+
+/* Rows, not runs of text. The whole row is the hit target — 36px high, which
+ * clears the 24px minimum for a pointer target with room to spare — and the
+ * hover state is a filled shape rather than an underline, so it reads at a
+ * glance which row the cursor is on. */
+.nav__link {
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  border-radius: var(--onmu-row-radius);
+  color: var(--theme-elevation-800);
+  font-size: 15px;
+  line-height: 1.35;
+  /* No fixed height: a label that wraps grows its row. */
+  transition: background-color 100ms ease, color 100ms ease;
+}
+
+.nav a.nav__link:hover,
+.nav a.nav__link:focus-visible {
+  background: var(--theme-elevation-50);
+  color: var(--theme-elevation-1000);
+  /* The filled row already signals the hover; the underline on top of it is
+   * noise, and it makes wrapped labels hard to read. */
+  text-decoration: none;
+}
+
+.nav__link:focus-visible {
+  outline: var(--accessibility-outline);
+  outline-offset: -2px;
+}
+
+/* Payload marks the current entity by rendering `.nav__link-indicator` inside
+ * the link, so this matches its own definition of active. */
+.nav__link:has(.nav__link-indicator) {
+  background: var(--theme-elevation-100);
+  color: var(--theme-elevation-1000);
+  font-weight: 600;
+}
+
+/* The default indicator hangs 20px outside the link, which worked when a link
+ * was bare text. With a filled row it has to sit on the row's own leading
+ * edge. */
+.nav__link-indicator {
+  inset-inline-start: 0;
+  width: 3px;
+  height: 60%;
+  border-radius: 0 2px 2px 0;
+  background: var(--onmu-brand);
+}
+
+.nav__link-label {
+  /* Long labels wrap instead of overflowing the sidebar. */
+  overflow-wrap: anywhere;
+}
+
+/* The elevation steps are compressed at the dark end of the scale, so the
+ * light-theme fills all but disappear. One step up each keeps the same three
+ * states legible. `admin.theme` is pinned to "light" in payload.config.ts, so
+ * this only matters if that is ever relaxed. */
+html[data-theme="dark"] .nav a.nav__link:hover,
+html[data-theme="dark"] .nav a.nav__link:focus-visible,
+html[data-theme="dark"] .nav__log-out:hover,
+html[data-theme="dark"] .nav__log-out:focus-visible,
+html[data-theme="dark"] .nav-group__toggle:hover,
+html[data-theme="dark"] .nav-group__toggle:focus-visible {
+  background: var(--theme-elevation-100);
+}
+
+html[data-theme="dark"] .nav__link:has(.nav__link-indicator) {
+  background: var(--theme-elevation-150);
+}
+
+/* ---------------------------------------------------------------- controls */
+
+/* Log-out, pinned to the bottom by Payload's `margin-top: auto`. `.nav__wrap`
+ * is `align-items: flex-start`, so without the stretch this box shrinks to the
+ * width of the 20px icon inside it and the separator draws as a stub. */
+.nav__controls {
+  align-self: stretch;
+  gap: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--theme-elevation-100);
+}
+
+.nav__controls > :first-child {
+  margin-top: 0;
+}
+
+/* A bare 20px icon flush against the sidebar edge is a small target and does
+ * not look related to the rows above it. Same padding and hover shape as a
+ * link, sized to the icon rather than the full width. */
+.nav__log-out {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--onmu-row-radius);
+}
+
+.nav__log-out:hover,
+.nav__log-out:focus-visible {
+  background: var(--theme-elevation-50);
+}
+
+.nav__log-out:focus-visible {
+  outline: var(--accessibility-outline);
+  outline-offset: -2px;
+}
+
+/* ------------------------------------------------------------------ mobile */
+
+@media (max-width: 768px) {
+  /* Payload enlarges nav links below this width for touch. Keep that intent —
+   * without this the rules above would silently shrink the mobile nav. */
+  .nav__link {
+    min-height: 44px;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .nav-group {
+    margin-bottom: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__link {
+    transition: none;
+  }
+}

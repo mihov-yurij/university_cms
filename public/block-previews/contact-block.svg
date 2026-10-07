@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 110" width="160" height="110" role="img" aria-label="Контакти">
+  <rect width="160" height="110" fill="#f1f5f9"/>
+  <path d="M34 22c-7.2 0-13 5.8-13 13 0 9.8 13 23 13 23s13-13.2 13-23c0-7.2-5.8-13-13-13z" fill="#94a3b8"/>
+  <circle cx="34" cy="35" r="5" fill="#f1f5f9"/>
+  <g fill="#64748b">
+    <rect x="60" y="26" width="82" height="6" rx="2"/>
+    <rect x="60" y="40" width="66" height="6" rx="2"/>
+    <rect x="60" y="54" width="74" height="6" rx="2"/>
+  </g>
+  <g fill="#94a3b8">
+    <circle cx="26" cy="88" r="7"/>
+    <circle cx="46" cy="88" r="7"/>
+    <circle cx="66" cy="88" r="7"/>
+    <circle cx="86" cy="88" r="7"/>
+  </g>
+</svg>

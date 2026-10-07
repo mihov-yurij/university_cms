@@ -1,0 +1,23 @@
+# docker-compose.yml
+services:
+  db:
+    image: postgres:17
+    container_name: cms-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cms
+    ports: ['5433:5432']
+    volumes: ['pgdata:/var/lib/postgresql/data']
+    # Without this, `docker compose up --wait` returns as soon as the container
+    # is running — which is before Postgres accepts connections, so `npm run
+    # db:up && npm run db:reset` would race.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d cms']
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:

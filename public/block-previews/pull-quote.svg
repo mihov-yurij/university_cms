@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 110" width="160" height="110" role="img" aria-label="Цитата">
+  <rect width="160" height="110" fill="#f1f5f9"/>
+  <rect x="16" y="24" width="128" height="2" fill="#cbd5e1"/>
+  <text x="80" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="34" fill="#94a3b8">“</text>
+  <rect x="34" y="60" width="92" height="7" rx="2" fill="#475569"/>
+  <rect x="48" y="73" width="64" height="7" rx="2" fill="#475569"/>
+  <rect x="16" y="92" width="128" height="2" fill="#cbd5e1"/>
+</svg>

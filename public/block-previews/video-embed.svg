@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 110" width="160" height="110" role="img" aria-label="Відео">
+  <rect width="160" height="110" fill="#f1f5f9"/>
+  <rect x="22" y="30" width="30" height="5" rx="2.5" fill="#94a3b8"/>
+  <rect x="62" y="22" width="80" height="45" rx="2" fill="#64748b"/>
+  <path d="M96 36.5 L96 52.5 L109 44.5 Z" fill="#f1f5f9"/>
+  <rect x="62" y="74" width="80" height="2" rx="1" fill="#94a3b8"/>
+  <rect x="62" y="74" width="18" height="2" rx="1" fill="#475569"/>
+</svg>

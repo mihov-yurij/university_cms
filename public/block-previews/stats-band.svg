@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 110" width="160" height="110" role="img" aria-label="Числа">
+  <rect width="160" height="110" fill="#f1f5f9"/>
+  <g fill="#64748b" font-family="system-ui, sans-serif" font-size="22" font-weight="700">
+    <text x="26" y="52">J5</text>
+    <text x="66" y="52">J6</text>
+    <text x="108" y="52">J7</text>
+  </g>
+  <g fill="#94a3b8">
+    <rect x="22" y="62" width="30" height="4" rx="2"/>
+    <rect x="22" y="70" width="20" height="4" rx="2"/>
+    <rect x="64" y="62" width="30" height="4" rx="2"/>
+    <rect x="64" y="70" width="22" height="4" rx="2"/>
+    <rect x="106" y="62" width="30" height="4" rx="2"/>
+    <rect x="106" y="70" width="16" height="4" rx="2"/>
+  </g>
+</svg>
