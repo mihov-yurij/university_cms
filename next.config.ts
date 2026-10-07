@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 import { withPayload } from "@payloadcms/next/withPayload";
 
-// This instance is the admin only — there is no frontend route tree. The
-// root path rewrites to the admin so a bare domain lands somewhere useful.
+// This instance is the admin plus one public page (the /submit profile form);
+// there is no other frontend route tree. The root path rewrites to the admin
+// so a bare domain lands somewhere useful.
 //
 // Media URLs point at the R2 bucket's public origin, so the image optimizer
 // needs that host allow-listed. Derived from the same variable the CMS builds
@@ -27,7 +28,7 @@ const nextConfig: NextConfig = {
       // /admin and /api are dynamic routes of their own; without the
       // exclusion below the rule would rewrite them into each other.
       {
-        source: "/:path((?!admin(?:/|$)|api(?:/|$)|_next/).*)",
+        source: "/:path((?!admin(?:/|$)|api(?:/|$)|submit(?:/|$)|_next/).*)",
         destination: "/admin/:path",
       },
     ];

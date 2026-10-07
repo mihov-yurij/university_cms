@@ -10,8 +10,8 @@ from it: same Payload version (3.88.0), same Next.js (16.3.0), same collection
 slugs, field names, labels and validation. A record created here imports into
 the main project unchanged.
 
-Only the administrator uses this. There is no public frontend: `/` rewrites to
-`/admin`.
+Only the administrator uses this. The public surface is one page — `/submit`,
+the profile form described below; `/` rewrites to `/admin`.
 
 ## What was copied, and what was left behind
 
@@ -74,6 +74,9 @@ npm run db:reset     # drop and recreate the local database
    | `DATABASE_URI_UNPOOLED` | Neon direct |
    | `PAYLOAD_SECRET` | any long random string, different from the main project's |
    | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PUBLIC_URL` | same bucket the main project uses, or its own |
+   | `SMTP_USER`, `SMTP_PASS` | app password for the mailbox that sends profile forms — see `.env.example` |
+   | `EMAIL_FROM`, `EMAIL_FROM_NAME` | the same address, and the name it appears under |
+   | `PROFILE_INBOX` | where submissions are emailed — defaults to the collector |
 
 4. Deploy. `vercel.json` runs `payload migrate` before `next build`, production
    only — the build log should show `Migrating: <timestamp>_initial`.
@@ -86,6 +89,33 @@ npx payload migrate:create <name>
 
 and commits the `.ts`, the `.json` and the regenerated `index.ts` in
 `migrations/`.
+
+## The profile form — `/submit`
+
+A department head or lecturer opens `https://<domain>/submit`, fills in the
+fields (department, name, position, degree, title, ORCID/Scopus/WoS/Scholar,
+contact, bio, publications, projects) and submits. That:
+
+1. saves a `submissions` record — readable only from the admin panel, under
+   Система → Заявки;
+2. generates the dossier `.docx` from those fields (`lib/profileDoc.ts`) and
+   emails it to `PROFILE_INBOX` as an attachment;
+3. records whether the mail went out in the «Лист надіслано» column. Unchecked
+   means SMTP is not configured or the send failed — the record is saved
+   either way.
+
+The same file is re-downloadable from the admin panel («Файл» column) via
+`GET /api/submissions/:id/file`, which requires an admin login.
+
+`create` is open to whoever holds the link — that is the point of a form with
+no login — so keep the URL out of public places, and expect that anyone who
+finds it can write records. Reads and deletes stay behind authentication.
+
+Preview the generated document without deploying:
+
+```bash
+npx payload run scripts/preview-doc.ts   # writes profile-preview.docx
+```
 
 ## Handing the data to the main project
 

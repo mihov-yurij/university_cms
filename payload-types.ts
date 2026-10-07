@@ -72,6 +72,7 @@ export interface Config {
     teachers: Teacher;
     media: Media;
     users: User;
+    submissions: Submission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     teachers: TeachersSelect<false> | TeachersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -792,6 +794,60 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Submissions from the public /submit form. The file is generated automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submissions".
+ */
+export interface Submission {
+  id: number;
+  department: string;
+  fullName: string;
+  position?: string | null;
+  degree?: string | null;
+  academicTitle?: string | null;
+  /**
+   * iD or full URL
+   */
+  orcid?: string | null;
+  /**
+   * iD or full URL
+   */
+  scopus?: string | null;
+  /**
+   * iD or full URL
+   */
+  wos?: string | null;
+  /**
+   * iD or full URL
+   */
+  googleScholar?: string | null;
+  email: string;
+  bio?: string | null;
+  publications?:
+    | {
+        entry?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  projects?:
+    | {
+        entry?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Checked when the document was emailed. Unchecked when SMTP is not configured or the send failed.
+   */
+  emailSent?: boolean | null;
+  /**
+   * Link to the generated .docx — opens while signed in to the admin panel.
+   */
+  fileUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -834,6 +890,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'submissions';
+        value: number | Submission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1232,6 +1292,39 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submissions_select".
+ */
+export interface SubmissionsSelect<T extends boolean = true> {
+  department?: T;
+  fullName?: T;
+  position?: T;
+  degree?: T;
+  academicTitle?: T;
+  orcid?: T;
+  scopus?: T;
+  wos?: T;
+  googleScholar?: T;
+  email?: T;
+  bio?: T;
+  publications?:
+    | T
+    | {
+        entry?: T;
+        id?: T;
+      };
+  projects?:
+    | T
+    | {
+        entry?: T;
+        id?: T;
+      };
+  emailSent?: T;
+  fileUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

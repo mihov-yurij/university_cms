@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { buildConfig } from "payload";
@@ -12,6 +13,7 @@ import { Media } from "./collections/Media";
 import { Institutes } from "./collections/Institutes";
 import { Departments } from "./collections/Departments";
 import { Teachers } from "./collections/Teachers";
+import { Submissions } from "./collections/Submissions";
 
 // Data-collection instance of the main university_platform CMS. Same Payload
 // version, same collection and field names — only the collections nobody here
@@ -79,9 +81,27 @@ export default buildConfig({
   // The sidebar order. Group labels fix where each group sits; this instance
   // has exactly three — Структура (what the administrator fills in), Медіа and
   // Система.
-  collections: [Institutes, Departments, Teachers, Media, Users],
+  collections: [Institutes, Departments, Teachers, Media, Users, Submissions],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET ?? "",
+  // Outbound mail for the public /submit form, which emails the generated
+  // .docx to the collector. transportOptions rather than `transport` so the
+  // adapter builds a dormant transporter: nothing connects until a message is
+  // actually sent, and `skipVerify` keeps a boot-time SMTP round-trip (which
+  // would fail whenever credentials are absent) out of every cold start.
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? "",
+    defaultFromName: process.env.EMAIL_FROM_NAME ?? "Збір профілів кафедр",
+    skipVerify: true,
+    transportOptions: {
+      host: process.env.SMTP_HOST ?? "smtp.gmail.com",
+      port: Number(process.env.SMTP_PORT ?? 465),
+      secure: (process.env.SMTP_PORT ?? "465") === "465",
+      auth: process.env.SMTP_USER
+        ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS ?? "" }
+        : undefined,
+    },
+  }),
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
