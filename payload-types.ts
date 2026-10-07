@@ -807,19 +807,19 @@ export interface Submission {
   degree?: string | null;
   academicTitle?: string | null;
   /**
-   * iD or full URL
+   * ID or full URL
    */
   orcid?: string | null;
   /**
-   * iD or full URL
+   * ID or full URL
    */
   scopus?: string | null;
   /**
-   * iD or full URL
+   * ID or full URL
    */
   wos?: string | null;
   /**
-   * iD or full URL
+   * ID or full URL
    */
   googleScholar?: string | null;
   email: string;
